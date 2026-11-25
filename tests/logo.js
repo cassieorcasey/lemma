@@ -7,7 +7,7 @@ const mk=async(sess,scheme,target=180)=>{const c=await b.newContext({viewport:{w
  const p=await c.newPage();p.errs=[];p.on('pageerror',e=>p.errs.push(e.message));await p.goto(APP);await p.waitForTimeout(500);return p;};
 const S=(cat,h,ago)=>({id:cat+ago+h,cat,start:now-ago*H-h*H,end:now-ago*H});
 let p=await mk([S('a',1.5,0.2),S('m',3,0.1),S('a',1,26),S('a',1,50)],'light');
-const svgA=await p.innerHTML('#orbit');ok(/ap-core/.test(svgA)&&(svgA.match(/<svg/g)||[]).length===1,'logo: The Focus Aperture, satu varian (terang)');
+const svgA=await p.innerHTML('#orbit');ok(/in-spark/.test(svgA)&&(svgA.match(/<svg/g)||[]).length===1,'logo: The Folded Insight, satu varian (terang)');
 await p.locator('.brand').screenshot({path:shot('mark-static.png')});
 p=await mk([S('a',4,0.2)],'light');ok((await p.innerHTML('#orbit'))===svgA,'logo statis: tidak berubah mengikuti jam belajar');
 p=await mk([S('a',1,0.2)],'dark');ok((await p.innerHTML('#orbit'))===svgA&&(await p.evaluate(()=>getComputedStyle(document.body).backgroundColor))==='rgb(223, 234, 235)','perangkat mode gelap: aplikasi dan logo tetap terang');

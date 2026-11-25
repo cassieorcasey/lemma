@@ -1,7 +1,7 @@
-// Bangun ulang ikon dari src/aperture.js:  node src/icons.js
+// Bangun ulang ikon dari src/insight.js:  node src/icons.js
 // Menulis src/assets/{fav96.png,touch180.png,fav.svg} (dipakai build.py) dan aset Xcode ke export/AppIcon.appiconset/.
 const { chromium } = require('playwright'), fs = require('fs'), path = require('path');
-const cd = require('./aperture.js');
+const cd = require('./insight.js');
 const A = path.join(__dirname, 'assets'), X = path.join(__dirname, '..', 'export', 'AppIcon.appiconset');
 (async () => {
   fs.mkdirSync(X, { recursive: true });
