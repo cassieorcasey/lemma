@@ -13,7 +13,7 @@ const st=()=>p.evaluate(()=>JSON.parse(localStorage.getItem('study_break_v2')));
 // 1 chip 1-klik
 ok((await p.locator('#chips .chip:not(.manage)').count())===2,'topik tampil langsung sebagai chip (2 belajar)');
 ok((await p.textContent('#glabel'))==='Topik belajar','label grup: Topik belajar');
-const on=p.locator('#chips .chip.on');ok((await on.textContent())==='Matematika'&&(await on.evaluate(e=>getComputedStyle(e).backgroundColor))==='rgb(29, 29, 31)','chip aktif netral (gelap ala Apple)');
+const on=p.locator('#chips .chip.on');ok((await on.textContent())==='Matematika'&&/linear-gradient\(135deg, rgb\(36, 50, 55\)/.test(await on.evaluate(e=>getComputedStyle(e).backgroundImage)),'chip aktif: gradasi kaca Obsidian Mist (G1)');
 await p.click('#chips .chip:has-text("Git")');ok((await p.textContent('#chips .chip.on'))==='Git','ganti topik cukup 1 klik');
 await p.click('#mBr');ok((await p.textContent('#glabel'))==='Kategori istirahat'&&(await p.locator('#chips .chip:not(.manage)').allTextContents()).join()==='Main,Istirahat','Break: label & chip istirahat');
 // 2 Break dijelaskan
@@ -25,7 +25,8 @@ ok((await p.$eval('#tbarFill',e=>e.style.width))==='50%','bar progres 50%');
 // 3 status visual & toast
 await p.click('#toggle');await p.waitForTimeout(1300);
 ok((await p.getAttribute('#app','class')).includes('run'),'kartu punya status berjalan');
-ok(!(await p.$eval('#app',e=>getComputedStyle(e).boxShadow)).includes('inset')&&(await p.$eval('#app',e=>getComputedStyle(e).backgroundImage))==='none','kartu timer tetap polos tanpa warna topik');
+const appSt=await p.$eval('#app',e=>{const c=getComputedStyle(e),r=getComputedStyle(document.documentElement);return [c.boxShadow+' '+c.backgroundImage,c.backgroundImage===getComputedStyle(document.querySelector('#viewTimer .card:not(#app)')||e).backgroundImage];});
+ok(!appSt[0].includes('0, 113, 227')&&appSt[1],'kartu timer tetap polos tanpa warna topik (sama dengan kartu lain)');
 ok((await p.textContent('#toggle'))==='Jeda'&&(await p.getAttribute('#toggle','class')).includes('pause'),'tombol Jeda bergaya sekunder abu-abu');
 const c1=await p.$eval('#toggle',e=>getComputedStyle(e).backgroundColor);
 await p.click('#chips .chip:has-text("Matematika")');await p.waitForTimeout(300);

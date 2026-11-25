@@ -17,8 +17,9 @@ function cadenceSVG(o) {
       ' L' + f(p[2][0]) + ' ' + f(p[2][1]) + ' A' + r1 + ' ' + r1 + ' 0 ' + (c1 - c0 > 180 ? 1 : 0) + ' 0 ' + f(p[3][0]) + ' ' + f(p[3][1]) + ' Z" stroke-width="' + 2 * K + '" stroke-linejoin="round"/>';
   }
   const T = {
-    light:  { bg: '#F2F4F7', b0: '#5E6675', b1: '#2E333C', acc: '#0A58FF', acc2: '#3D7BFF', shadow: true },
-    dark:   { bg: '#000000', b0: '#3A3E46', b1: '#1D1F24', acc: '#29C8FF', acc2: '#7BE0FF', glow: true },
+    // Frosted Mineral (terang) dan Deep Slate Glass (gelap)
+    light:  { bg: '#DFEAEB', b0: '#81959F', b1: '#52656D', acc: '#243237', acc2: '#3A4F57', shadow: true },
+    dark:   { bg: '#141D21', b0: '#35474E', b1: '#243237', acc: '#A5BEC1', acc2: '#DFEAEB', glow: true },
     tinted: { bg: '#333333', b0: '#999999', b1: '#999999', acc: '#FFFFFF', acc2: '#FFFFFF' }   // 20% / 60% / 100%
   }[o.theme];
   const id = o.id, sw = Math.max(0, Math.min(360, o.sweep));
@@ -27,7 +28,7 @@ function cadenceSVG(o) {
   let s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="' + o.size + '" height="' + o.size + '"><defs>' +
     '<linearGradient id="' + id + 'b" x1="200" y1="160" x2="820" y2="880" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="' + T.b0 + '"/><stop offset="1" stop-color="' + T.b1 + '"/></linearGradient>' +
     '<linearGradient id="' + id + 'a" x1="560" y1="150" x2="880" y2="560" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="' + T.acc2 + '"/><stop offset="1" stop-color="' + T.acc + '"/></linearGradient>' +
-    '<filter id="' + id + 's" filterUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1024"><feDropShadow dx="0" dy="14" stdDeviation="20" flood-color="#0B1220" flood-opacity=".22"/></filter>' +
+    '<filter id="' + id + 's" filterUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1024"><feDropShadow dx="0" dy="14" stdDeviation="20" flood-color="#243237" flood-opacity=".22"/></filter>' +
     '<filter id="' + id + 'g" filterUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1024"><feGaussianBlur stdDeviation="22"/></filter>';
   // penanda indeks: potongan radial di tepi luar, jam 5, 7, 9, 11 (selaras kelipatan 60° dari blok aksen)
   let ticks = '';
