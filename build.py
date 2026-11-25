@@ -2,7 +2,7 @@
 
     python3 build.py
 
-Menyisipkan ikon (base64) dan src/cadence.js ke src/template.html.
+Menyisipkan ikon (base64) dan src/aperture.js ke src/template.html.
 """
 import base64, pathlib, re
 
@@ -14,9 +14,9 @@ def data_uri(name, mime='image/png'):
 
 def build():
     t = (SRC / 'template.html').read_text(encoding='utf-8')
-    cad = (SRC / 'cadence.js').read_text(encoding='utf-8')
-    cad = cad.replace("if (typeof module !== 'undefined') module.exports = cadenceSVG;\n", '').rstrip()
-    t = t.replace('  /*{{CADENCE_JS}}*/', '  ' + cad.replace('\n', '\n  '))
+    ap = (SRC / 'aperture.js').read_text(encoding='utf-8')
+    ap = ap.replace("if (typeof module !== 'undefined') module.exports = apertureSVG;\n", '').rstrip()
+    t = t.replace('  /*{{APERTURE_JS}}*/', '  ' + ap.replace('\n', '\n  '))
     t = (t.replace('{{FAV96}}', data_uri('fav96.png'))
           .replace('{{TOUCH}}', data_uri('touch180.png'))
           .replace('{{FAVSVG}}', data_uri('fav.svg', 'image/svg+xml')))

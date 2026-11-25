@@ -11,8 +11,8 @@ Aplikasi: https://cassieorcasey.github.io/StudyO/
 | Lokasi | Isi |
 |---|---|
 | `src/template.html` | Sumber aplikasi: CSS, HTML, dan JavaScript. **Sunting di sini.** |
-| `src/cadence.js` | Generator logo The Cadence Disk (SVG), dipakai di aplikasi dan untuk ikon |
-| `src/icons.js` | Membuat ulang ikon dari `cadence.js` |
+| `src/aperture.js` | Generator logo The Focus Aperture (SVG), dipakai di aplikasi dan untuk ikon |
+| `src/icons.js` | Membuat ulang ikon dari `aperture.js` |
 | `src/assets/` | Ikon yang disisipkan ke aplikasi saat build |
 | `build.py` | Menggabungkan `src/` menjadi `index.html` |
 | `index.html` | Hasil build yang dibuka GitHub Pages. **Jangan disunting langsung.** |
@@ -27,7 +27,7 @@ npx playwright install chromium  # sekali, memasang browser uji
 
 npm run build   # src/ → index.html
 npm test        # build lalu jalankan semua uji
-npm run icons   # buat ulang ikon dari src/cadence.js, lalu build
+npm run icons   # buat ulang ikon dari src/aperture.js, lalu build
 ```
 
 Setiap push menjalankan uji di GitHub Actions. Uji juga memeriksa bahwa `index.html` sudah dibangun ulang dari `src/`.
@@ -46,7 +46,7 @@ Layar: Catat (`#catat`, layar pertama), Progres (`#progres`), Timer (`#timer`), 
 
 ## Alur mengubah aplikasi
 
-1. Sunting `src/template.html` (atau `src/cadence.js` untuk logo).
+1. Sunting `src/template.html` (atau `src/aperture.js` untuk logo).
 2. `npm test`. Semua uji harus lolos.
 3. Commit `src/` dan `index.html` bersamaan, lalu push.
 

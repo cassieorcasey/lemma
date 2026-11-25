@@ -1,7 +1,7 @@
-// Bangun ulang ikon dari src/cadence.js:  node src/icons.js
+// Bangun ulang ikon dari src/aperture.js:  node src/icons.js
 // Menulis src/assets/{fav96.png,touch180.png,fav.svg} (dipakai build.py) dan aset Xcode ke export/AppIcon.appiconset/.
 const { chromium } = require('playwright'), fs = require('fs'), path = require('path');
-const cd = require('./cadence.js');
+const cd = require('./aperture.js');
 const A = path.join(__dirname, 'assets'), X = path.join(__dirname, '..', 'export', 'AppIcon.appiconset');
 (async () => {
   fs.mkdirSync(X, { recursive: true });
@@ -12,10 +12,10 @@ const A = path.join(__dirname, 'assets'), X = path.join(__dirname, '..', 'export
     await p.screenshot({ path: file, omitBackground: !!transparent, clip: { x: 0, y: 0, width: size, height: size } });
   };
   const strip = s => s.replace(/<svg[^>]*>/, '').replace('</svg>', '');
-  const fav = cd({ theme: 'light', id: 'f', bg: false, ticks: false });
+  const fav = cd({ theme: 'light', id: 'f', bg: false });
   await shot(cd({ theme: 'light', id: 'l' }), path.join(A, 'touch180.png'), 180);
   await shot(fav, path.join(A, 'fav96.png'), 96, true);
-  fs.writeFileSync(path.join(A, 'fav.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><style>.d{display:none}@media (prefers-color-scheme:dark){.l{display:none}.d{display:inline}}</style><g class="l">' + strip(fav) + '</g><g class="d">' + strip(cd({ theme: 'dark', id: 'fd', bg: false, ticks: false })) + '</g></svg>');
+  fs.writeFileSync(path.join(A, 'fav.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><style>.d{display:none}@media (prefers-color-scheme:dark){.l{display:none}.d{display:inline}}</style><g class="l">' + strip(fav) + '</g><g class="d">' + strip(cd({ theme: 'dark', id: 'fd', bg: false })) + '</g></svg>');
   await shot(cd({ theme: 'light', id: 'l' }), path.join(X, 'AppIcon-Default.png'), 1024);
   await shot(cd({ theme: 'dark', id: 'd' }), path.join(X, 'AppIcon-Dark.png'), 1024);
   await shot(cd({ theme: 'tinted', id: 'tb', layer: 'back' }), path.join(X, 'AppIcon-Tinted-Back.png'), 1024);

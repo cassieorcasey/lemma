@@ -494,7 +494,11 @@
   }
   .pill:not(:disabled):active, .chip:active, .tabs button:not(:disabled):active, .seg button:active,
   .pnav button:not(:disabled):active, .x:active, .sm:not(:disabled):active { transform: scale(.96); }
-  .brand:hover .tile { transform: rotate(-6deg) scale(1.06); }
+  /* Aperture menyempit: kedua bilah mendekat ke inti, inti sedikit membesar */
+  .tile .ap-a, .tile .ap-b, .tile .ap-core { transition: transform .35s cubic-bezier(.2,.8,.2,1); transform-box: fill-box; transform-origin: center; }
+  .brand:hover .tile .ap-a { transform: translateY(14px); }
+  .brand:hover .tile .ap-b { transform: translateY(-14px); }
+  .brand:hover .tile .ap-core { transform: scale(1.08); }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
@@ -811,13 +815,13 @@
   // Dengan begitu tombol di dalamnya tidak diganti di antara tekan dan lepas klik.
   function keyed(box, key, build) { if (box._key === key) return false; box._key = key; box.textContent = ''; build(box); return true; }
   const invalidate = box => { box._key = null; };
-  /* ---------- Logo "The Cadence Disk": statis, blok aksen 60°. Tidak lagi mengukur jam belajar. ---------- */
-  /*{{CADENCE_JS}}*/
+  /* ---------- Logo "The Focus Aperture": bingkai fokus yang mengapit satu inti pemahaman ---------- */
+  /*{{APERTURE_JS}}*/
   function updateMark() {
     const box = document.getElementById('orbit'); if (!box) return;
     keyed(box, 'static', b => {
-      b.innerHTML = cadenceSVG({ theme: 'light', id: 'ml', size: 30, ticks: false, bg: false }).replace('<svg ', '<svg class="ol" ') +
-                    cadenceSVG({ theme: 'dark', id: 'md', size: 30, ticks: false, bg: false }).replace('<svg ', '<svg class="od" ');
+      b.innerHTML = apertureSVG({ theme: 'light', id: 'ml', size: 30, bg: false }).replace('<svg ', '<svg class="ol" ') +
+                    apertureSVG({ theme: 'dark', id: 'md', size: 30, bg: false }).replace('<svg ', '<svg class="od" ');
     });
   }
 
