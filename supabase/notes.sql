@@ -1,4 +1,4 @@
--- StudyO: tabel catatan hasil belajar.
+-- Lemma: tabel catatan hasil belajar.
 -- Jalankan sekali di Supabase → SQL Editor. Aman dijalankan ulang (tidak menghapus data).
 -- Tabel lain (settings, categories, sessions, active_timer) tidak disentuh.
 

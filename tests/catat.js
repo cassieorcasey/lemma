@@ -37,7 +37,7 @@ s=await S(p);const n2=s.notes[1];ok(n2&&n2.cat==='git'&&n2.kind==='soal'&&n2.n==
 ok(s.logCat==='git','topik terakhir diingat');
 const today=await p.textContent('#logToday');ok(/Latihan soal.*Rebase interaktif.*Git · 10\.00 · 12 soal · 45m/.test(today.replace(/\s+/g,' ')),'Hari ini: jenis, kalimat, topik, jam, jumlah, menit');
 ok((await p.locator('#logToday .note').first().textContent()).includes('Rebase'),'Hari ini: terbaru di atas');
-await p.reload();await p.waitForTimeout(200);ok((await p.locator('#logToday .note').count())===2&&(await p.textContent('#logCats .chip.on'))==='Git','setelah muat ulang: catatan dan topik tetap');
+await p.reload();await p.waitForFunction(()=>window.StudyO&&document.querySelectorAll('#logToday .note').length===2,null,{timeout:5000}).catch(()=>{});ok((await p.locator('#logToday .note').count())===2&&(await p.textContent('#logCats .chip.on'))==='Git','setelah muat ulang: catatan dan topik tetap');
 
 // 3. Hapus: ketukan pertama meminta konfirmasi
 const x=p.locator('#logToday .note .x').first();await x.click();ok((await x.textContent())==='Hapus'&&(await S(p)).notes.length===2,'ketuk pertama: minta konfirmasi');

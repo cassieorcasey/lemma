@@ -1,7 +1,7 @@
 {
   "name": "studyo",
   "private": true,
-  "description": "StudyO: pencatat waktu belajar dan istirahat (satu file HTML, sinkron lewat Supabase).",
+  "description": "Lemma: pencatat waktu belajar dan istirahat (satu file HTML, sinkron lewat Supabase).",
   "scripts": {
     "build": "python3 build.py",
     "test": "python3 build.py && node tests/run.js",

@@ -1,8 +1,8 @@
-# StudyO
+# Lemma
 
 Catatan hasil belajar. Setelah belajar, catat apa yang kamu pahami: topik, jenis hasil (Bab selesai, Rangkuman, Latihan soal, Paham konsep), dan satu kalimat. Layar Progres menampilkan linimasa hasil per topik tanpa total jam atau target.
 
-Timer (Stopwatch, Countdown, Break) tetap ada sebagai alat opsional lewat ikon di navigasi. Setelah sesi belajar berhenti, StudyO menawarkan mencatat hasilnya dengan topik dan menit terisi. Statistik jam belajar tetap tersedia sebagai layar sekunder. Data tersimpan di perangkat dan tersinkron antar perangkat lewat Supabase.
+Timer (Stopwatch, Countdown, Break) tetap ada sebagai alat opsional lewat ikon di navigasi. Setelah sesi belajar berhenti, Lemma menawarkan mencatat hasilnya dengan topik dan menit terisi. Statistik jam belajar tetap tersedia sebagai layar sekunder. Data tersimpan di perangkat dan tersinkron antar perangkat lewat Supabase.
 
 Aplikasi: https://cassieorcasey.github.io/StudyO/
 
