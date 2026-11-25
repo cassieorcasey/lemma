@@ -11,8 +11,8 @@ Aplikasi: https://cassieorcasey.github.io/StudyO/
 | Lokasi | Isi |
 |---|---|
 | `src/template.html` | Sumber aplikasi: CSS, HTML, dan JavaScript. **Sunting di sini.** |
-| `src/insight.js` | Generator logo The Folded Insight (SVG), dipakai di aplikasi dan untuk ikon |
-| `src/icons.js` | Membuat ulang ikon dari `insight.js` |
+| `src/keystone.js` | Generator logo The Keystone Notch (SVG), dipakai di aplikasi dan untuk ikon |
+| `src/icons.js` | Membuat ulang ikon dari `keystone.js` |
 | `src/assets/` | Ikon yang disisipkan ke aplikasi saat build |
 | `build.py` | Menggabungkan `src/` menjadi `index.html` |
 | `index.html` | Hasil build yang dibuka GitHub Pages. **Jangan disunting langsung.** |
@@ -27,7 +27,7 @@ npx playwright install chromium  # sekali, memasang browser uji
 
 npm run build   # src/ → index.html
 npm test        # build lalu jalankan semua uji
-npm run icons   # buat ulang ikon dari src/insight.js, lalu build
+npm run icons   # buat ulang ikon dari src/keystone.js, lalu build
 ```
 
 Setiap push menjalankan uji di GitHub Actions. Uji juga memeriksa bahwa `index.html` sudah dibangun ulang dari `src/`.
@@ -46,7 +46,7 @@ Layar: Catat (`#catat`, layar pertama), Progres (`#progres`), Timer (`#timer`), 
 
 ## Alur mengubah aplikasi
 
-1. Sunting `src/template.html` (atau `src/insight.js` untuk logo).
+1. Sunting `src/template.html` (atau `src/keystone.js` untuk logo).
 2. `npm test`. Semua uji harus lolos.
 3. Commit `src/` dan `index.html` bersamaan, lalu push.
 

@@ -175,7 +175,6 @@
   }
   .kind svg { width: 20px; height: 20px; flex: none; color: var(--soft); }
   .kind:not([aria-pressed="true"]):hover { background: var(--seg-on); box-shadow: 0 0 0 1px var(--line); }
-  .kind { transition: background .2s, box-shadow .2s, color .2s; }
   .kind[aria-pressed="true"] { background: var(--accent-grad); color: var(--accent-ink); font-weight: 600; box-shadow: var(--glass-hi), var(--glass-drop); }
   .kind[aria-pressed="true"] svg { color: var(--accent-ink); }
   @media (max-width: 430px) {
@@ -252,8 +251,12 @@
   .row > span { display: flex; align-items: center; gap: 8px; min-width: 0; color: var(--soft); }
   .row b { font-weight: 600; font-variant-numeric: tabular-nums; }
   .row .val { display: flex; align-items: center; gap: 6px; flex: none; }
-  /* Tombol Quick Play: muncul saat baris di-hover/fokus; di layar sentuh selalu terlihat */
-  .qp { width: 32px; height: 32px; flex: none; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--accent); font-size: 11px; line-height: 1; padding: 0 0 0 2px; transition: background .15s, color .15s, border-color .15s; }
+  /* Tombol Quick Play: di layar sentuh selalu penuh; dengan mouse tampil redup dan menegas saat baris di-hover atau difokus */
+  .qp { width: 32px; height: 32px; flex: none; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--accent); font-size: 11px; line-height: 1; padding: 0 0 0 2px; transition: background .15s, color .15s, border-color .15s, opacity .15s; }
+  @media (hover: hover) and (pointer: fine) {
+    .qp:not(.on) { opacity: .45; }
+    .row:hover .qp, .topic:hover .qp, .qp:focus-visible { opacity: 1; }
+  }
   .qp:hover, .qp:focus-visible { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   .qp.on { background: var(--amber-bg); border-color: var(--amber-bg); color: var(--amber-ink); padding: 0; }
   .qp:disabled { visibility: hidden; }
@@ -442,15 +445,15 @@
   .bar i { transition: width .6s cubic-bezier(.2,.8,.2,1); }
   details[open] > *:not(summary) { animation: rise .35s cubic-bezier(.2,.8,.2,1) both; }
   summary { transition: opacity .2s; }
-  .pill, .chip, .tabs button, .seg button, .pnav button, .x, .sm, .tile {
-    transition: transform .15s ease, background .2s, color .2s, box-shadow .2s;
+  .pill, .chip, .kind, .tabs button, .seg button, .pnav button, .x, .sm, .tile {
+    transition: transform .15s ease, background .2s, color .2s, border-color .2s, box-shadow .2s;
   }
-  .pill:not(:disabled):active, .chip:active, .tabs button:not(:disabled):active, .seg button:active,
+  .pill:not(:disabled):active, .chip:active, .kind:active, .tabs button:not(:disabled):active, .seg button:active,
   .pnav button:not(:disabled):active, .x:active, .sm:not(:disabled):active { transform: scale(.96); }
-  /* Secarik kertas catatan: sedikit miring dan terangkat, percikan berkilau */
-  .tile svg, .tile .in-spark { transition: transform .35s cubic-bezier(.2,.8,.2,1); transform-box: fill-box; transform-origin: center; }
-  .brand:hover .tile svg { transform: translateY(-1px) rotate(-4deg); }
-  .brand:hover .tile .in-spark { transform: scale(1.2); }
+  /* Penguncian mekanis: fondasi diam sebagai jangkar, pasak turun ke ceruknya.
+     Satuan di dalam SVG adalah grid 1024, jadi 40 ≈ 1,2px pada tile 30px: celah 48 hampir menutup tanpa menimpa. */
+  .tile .in-wedge { transition: transform .3s cubic-bezier(.2,.8,.2,1); }
+  .brand:hover .tile .in-wedge { transform: translateY(40px); }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
@@ -608,7 +611,7 @@
     </div>
     <div class="card">
       <h3>Kategori</h3>
-      <p class="hint katHint">Jenis menentukan statistik. Untuk <b>Belajar</b>, menit = target harian per topik. Untuk <b>Istirahat</b>, menit = batas harian; centang "Mundur" agar jadi timer hitung mundur. 0 = tanpa target/batas. Perubahan tersimpan otomatis.</p>
+      <p class="hint katHint"><b>Belajar</b>: target menit per hari. <b>Istirahat</b>: batas menit per hari; centang Mundur untuk hitung mundur. Isi 0 bila tanpa target. Tersimpan otomatis.</p>
       <div id="cats" class="catgrid"></div>
       <button class="sm add" id="addCat">+ Tambah kategori</button>
     </div>
@@ -768,11 +771,11 @@
   function keyed(box, key, build) { if (box._key === key) return false; box._key = key; box.textContent = ''; build(box); return true; }
   const invalidate = box => { box._key = null; };
   /* ---------- Logo "The Folded Insight": lembar catatan berlipat dengan percikan pemahaman ---------- */
-  /*{{INSIGHT_JS}}*/
+  /*{{KEYSTONE_JS}}*/
   function updateMark() {
     const box = document.getElementById('orbit'); if (!box) return;
     keyed(box, 'static', b => {
-      b.innerHTML = insightSVG({ theme: 'light', id: 'ml', size: 30, bg: false });
+      b.innerHTML = keystoneSVG({ theme: 'light', id: 'ml', size: 30, bg: false });
     });
   }
 
@@ -1040,7 +1043,7 @@
     const list = groupCats(), brk = Timer.state().group === 'rest';
     const none = $('noCats');
     none.hidden = list.length > 0;
-    none.textContent = brk ? 'Belum ada kategori Istirahat. Tambahkan lewat ikon Pengaturan.' : 'Belum ada kategori Belajar. Tambahkan lewat ikon Pengaturan.';
+    none.textContent = brk ? 'Belum ada kategori Istirahat. Tambahkan di Pengaturan.' : 'Belum ada kategori Belajar. Tambahkan di Pengaturan.';
     $('glabel').textContent = brk ? 'Kategori istirahat' : 'Topik belajar';
     keyed($('chips'), list.map(k => k.id + k.name + k.color).join('~') + '#' + S.sel, box => {
       if (!list.length) return;
@@ -1547,7 +1550,7 @@
     const box = $('topics'); box.textContent = '';
     const study = S.cats.filter(c => c.type === 'study')
       .concat(Kategori.gone().filter(g => g.type === 'study' && byCat[g.id] > 0).map(g => Object.assign({}, g, { name: g.name + ' (dihapus)' })));
-    if (!study.length) { box.appendChild(el('p', { className: 'empty', textContent: 'Belum ada kategori bertanda Belajar. Atur di tab Kategori.' })); return; }
+    if (!study.length) { box.appendChild(el('p', { className: 'empty', textContent: 'Belum ada kategori Belajar. Tambahkan di Pengaturan.' })); return; }
     study.slice().sort((a, b) => (byCat[b.id] || 0) - (byCat[a.id] || 0)).forEach(c => {
       const ms = byCat[c.id] || 0, tgt = (c.limit || 0) * M * nDays;
       const bar = el('div', { className: 'bar' }, [el('i', { style: 'width:' + (tgt ? Math.min(100, ms / tgt * 100) : 0) + '%;background:' + c.color })]);
@@ -1573,7 +1576,7 @@
     for (let i = 0; i < all.length; i++) for (let j = i + 1; j < all.length && all[j].start < all[i].end; j++) { conf.add(all[i].id); conf.add(all[j].id); }
     const nConf = S.sessions.filter(s => conf.has(s.id) && s.end > a && s.start < b).length;
     $('confNote').hidden = !nConf;
-    $('confNote').textContent = nConf ? nConf + ' sesi saling tumpang tindih di periode ini (biasanya dari timer offline di dua perangkat). Waktunya terhitung ganda; cek tanda oranye di Riwayat dan hapus atau ubah salah satunya.' : '';
+    $('confNote').textContent = nConf ? nConf + ' sesi tumpang tindih dan terhitung dua kali, biasanya dari timer offline di dua perangkat. Perbaiki lewat tanda oranye di Riwayat.' : '';
     const full = S.sessions.filter(s => s.end > a && s.start < b).sort((x, y) => (conf.has(y.id) - conf.has(x.id)) || (y.start - x.start));
     if (!full.length) { box.appendChild(el('p', { className: 'empty', textContent: 'Belum ada sesi di periode ini.' })); return; }
     const hk = per + ':' + offset; if (histKey !== hk) { histKey = hk; histN = HIST_PAGE; }
@@ -1974,7 +1977,7 @@
     const note = msg ? el('p', { className: 'dmsg' + (isErr ? ' bad' : ''), textContent: msg }) : null;
     if (!sb) {
       put(el('h3', { textContent: 'Tidak terhubung' }),
-        el('p', { className: 'hint', textContent: 'Pustaka Supabase tidak termuat, biasanya karena tidak ada internet saat halaman dibuka. Timer tetap berjalan dan semua data tersimpan di perangkat ini. Muat ulang halaman saat online untuk masuk dan sinkron.' }));
+        el('p', { className: 'hint', textContent: 'Supabase tidak termuat, biasanya karena halaman dibuka tanpa internet. Timer dan data tetap tersimpan di perangkat ini. Muat ulang saat online untuk masuk.' }));
       return;
     }
     if (S.sync.uid) {
@@ -1982,7 +1985,7 @@
       const pending = S.sessions.filter(s => S.sync.h.s[s.id] !== hsh(rowS(s))).length;
       const hn = S.sync.h.n || {};
       const pendingN = S.notes.filter(x => hn[x.id] !== hsh(rowN(x))).length;
-      const status = { busy: 'Sedang menyinkron…', ok: 'Tersinkron', off: 'Offline: perubahan disimpan di perangkat ini dan dikirim saat online', err: 'Sinkron gagal: ' + Sync.err, none: 'Siap' }[Sync.state];
+      const status = { busy: 'Sedang menyinkron…', ok: 'Tersinkron', off: 'Offline · dikirim saat online', err: 'Sinkron gagal: ' + Sync.err, none: 'Siap' }[Sync.state];
       const now = el('button', { className: 'pill primary', textContent: 'Sinkronkan' });
       now.onclick = () => syncNow();
       const out = el('button', { className: 'pill', textContent: 'Keluar' });
@@ -1997,7 +2000,7 @@
           el('div', { className: 'row' }, [el('span', { textContent: 'Sesi menunggu dikirim' }), el('b', { textContent: String(pending) })]),
           el('div', { className: 'row' }, [el('span', { textContent: 'Perangkat ini' }), el('b', { textContent: DEV })])
         ]),
-        Sync.noNotes ? el('p', { className: 'hint', textContent: 'Catatan hasil tetap tersimpan di perangkat ini. Agar tersinkron, jalankan supabase/notes.sql sekali di SQL Editor Supabase.' }) : null,
+        Sync.noNotes ? el('p', { className: 'hint', textContent: 'Catatan hasil tersimpan di perangkat ini. Agar ikut tersinkron, jalankan supabase/notes.sql sekali di SQL Editor Supabase.' }) : null,
         note,
         el('div', { className: 'controls dctl' }, [now, out])
       );
@@ -2010,7 +2013,7 @@
       if (!/^\S+@\S+\.\S+$/.test(v)) return renderDlg('Tulis alamat email yang valid.', true);
       send.disabled = true; send.textContent = 'Mengirim…';
       try { await timeout(sendLink(v), 15000); sentTo = v; renderDlg('Tautan terkirim ke ' + v + '. Cek juga folder Spam.'); }
-      catch (e) { renderDlg(/rate|limit|seconds/i.test(e.message) ? 'Terlalu sering meminta tautan. Tunggu sebentar (batas email bawaan Supabase sangat kecil), lalu coba lagi.' : 'Gagal mengirim: ' + e.message, true); }
+      catch (e) { renderDlg(/rate|limit|seconds/i.test(e.message) ? 'Terlalu banyak permintaan tautan. Tunggu beberapa menit, lalu coba lagi.' : 'Gagal mengirim: ' + e.message, true); }
     };
     const paste = el('input', { className: 'field dfield', type: 'url', placeholder: 'Tempel tautan dari email di sini' });
     const go = el('button', { className: 'pill primary', textContent: 'Masuk' });
@@ -2028,20 +2031,19 @@
       if (!/^\S+@\S+\.\S+$/.test(v) || !pw.value) return renderDlg('Isi email dan kata sandi.', true);
       pwGo.disabled = true; pwGo.textContent = 'Memeriksa…';
       try { must(await timeout(sb.auth.signInWithPassword({ email: v, password: pw.value }), 15000)); renderDlg('Berhasil masuk. Menyinkronkan…'); }
-      catch (e) { renderDlg(/invalid login/i.test(e.message) ? 'Email atau kata sandi salah. Pastikan akun sudah dibuat di dasbor Supabase (Authentication → Users).' : 'Gagal masuk: ' + e.message, true); }
+      catch (e) { renderDlg(/invalid login/i.test(e.message) ? 'Email atau kata sandi salah. Akun dibuat di dasbor Supabase (Authentication → Users).' : 'Gagal masuk: ' + e.message, true); }
     };
     pwGo.onclick = doPw; pw.onkeydown = e => { if (e.key === 'Enter') doPw(); };
     put(
       el('h3', { textContent: 'Masuk untuk sinkron' }),
-      el('p', { className: 'hint', textContent: 'Cukup sekali per perangkat. Pilih kata sandi, atau tautan yang dikirim ke email.' }),
+      el('p', { className: 'hint', textContent: 'Cukup sekali per perangkat, pakai kata sandi atau tautan dari email.' }),
       el('p', { className: 'dstep', textContent: 'Dengan kata sandi' }), pwEmail, pw,
       el('div', { className: 'controls dctl' }, [pwGo]),
       el('p', { className: 'dstep', textContent: 'Atau dengan tautan email' }), email,
       el('div', { className: 'controls dctl' }, [send]),
-      el('p', { className: 'hint', textContent: 'Sudah punya tautan dari email? Tempel di sini:' }),
       el('p', { className: 'hint', textContent: hosted
-        ? 'Klik tautan "Sign in" di email pada perangkat ini, atau salin alamat tautannya lalu tempel di bawah (berguna di iPhone bila aplikasi dibuka dari layar utama).'
-        : 'Jangan klik tautannya. Klik kanan pada "Sign in" lalu pilih "Salin alamat link" (di HP: tekan lama, lalu Salin). Tempel di bawah. Tautan hanya bisa dipakai sekali dan berlaku 1 jam.' }),
+        ? 'Sudah dapat tautan? Klik "Sign in" di email pada perangkat ini, atau salin tautannya dan tempel di bawah (untuk aplikasi di layar utama iPhone).'
+        : 'Sudah dapat tautan? Jangan diklik: salin alamat "Sign in" (klik kanan, atau tekan lama di HP), lalu tempel di bawah. Berlaku 1 jam, sekali pakai.' }),
       paste,
       el('div', { className: 'controls dctl' }, [go]),
       note

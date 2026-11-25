@@ -54,7 +54,9 @@ ok((await p.locator('#todayStack i').count())===2,'stacked bar multi-warna (2 to
 const segc=await p.locator('#todayStack i').evaluateAll(a=>a.map(e=>getComputedStyle(e).backgroundColor));ok(segc[0]!==segc[1],'segmen berwarna sesuai topik');
 ok((await p.locator('#rows .mbar').count())>=3,'mini progress bar per topik bertarget');
 const mainBar=p.locator('#rows .row',{hasText:'Main'}).locator('.mbar');ok((await mainBar.getAttribute('class')).includes('over'),'istirahat lewat batas ditandai');
-ok((await p.locator('#rows .qp').first().evaluate(e=>getComputedStyle(e).opacity))==='1','▶ selalu terlihat');
+{const q=p.locator('#rows .qp').first();await p.mouse.move(5,5);await p.waitForTimeout(250);const o0=await q.evaluate(e=>getComputedStyle(e).opacity);
+await p.locator('#rows .row').first().hover();await p.waitForTimeout(250);const o1=await q.evaluate(e=>getComputedStyle(e).opacity);
+ok(Number(o0)>=0.4&&Number(o0)<1&&o1==='1','▶ redup saat diam, tegas saat baris di-hover ('+o0+' → '+o1+')');}
 // 7 Riwayat & pengaturan
 await p.click('#tabSt');await p.waitForTimeout(500);
 await p.mouse.move(5,5);const h0=p.locator('#hist .hrow').first();

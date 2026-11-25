@@ -1,7 +1,7 @@
-// Bangun ulang ikon dari src/insight.js:  node src/icons.js
+// Bangun ulang ikon dari src/keystone.js:  node src/icons.js
 // Menulis src/assets/{fav96.png,touch180.png,fav.svg} (dipakai build.py) dan aset Xcode ke export/AppIcon.appiconset/.
 const { chromium } = require('playwright'), fs = require('fs'), path = require('path');
-const cd = require('./insight.js');
+const cd = require('./keystone.js');
 const A = path.join(__dirname, 'assets'), X = path.join(__dirname, '..', 'export', 'AppIcon.appiconset');
 (async () => {
   fs.mkdirSync(X, { recursive: true });
@@ -11,9 +11,9 @@ const A = path.join(__dirname, 'assets'), X = path.join(__dirname, '..', 'export
     await p.setContent('<html><body style="margin:0;background:transparent">' + svg.replace(/width="\d+" height="\d+"/, 'width="' + size + '" height="' + size + '"') + '</body></html>');
     await p.screenshot({ path: file, omitBackground: !!transparent, clip: { x: 0, y: 0, width: size, height: size } });
   };
-  const fav = cd({ theme: 'light', id: 'f', bg: false });
+  const fav = cd({ theme: 'light', id: 'f', bg: false, shadow: false });   // favicon: tanpa bayangan agar tepi tajam
   await shot(cd({ theme: 'light', id: 'l' }), path.join(A, 'touch180.png'), 180);
-  await shot(fav, path.join(A, 'fav96.png'), 96, true);
+  await shot(cd({ theme: 'light', id: 'f', bg: false, shadow: false }), path.join(A, 'fav96.png'), 96, true);
   fs.writeFileSync(path.join(A, 'fav.svg'), fav);
   await shot(cd({ theme: 'light', id: 'l' }), path.join(X, 'AppIcon-Default.png'), 1024);
   await shot(cd({ theme: 'tinted', id: 'tb', layer: 'back' }), path.join(X, 'AppIcon-Tinted-Back.png'), 1024);
